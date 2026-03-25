@@ -1,18 +1,16 @@
-# 🏛️ LLM Council
+# Debate Dock
 
 > **Structured multi-model AI deliberation with personas, 3-round debates, and Chairman synthesis.**
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/YOUR_USERNAME/llm-council)
-
-**[→ Try it live](#)** · [OpenRouter](https://openrouter.ai) · MIT License
+**[→ Try it live](https://debate-dock.vercel.app)** · [OpenRouter](https://openrouter.ai) · MIT License
 
 ---
 
-## What is LLM Council?
+## What is Debate Dock?
 
-Inspired by Andrej Karpathy's LLM Council concept, this is a reimagined version with named personas, non-anonymous peer review, and user-controlled round progression.
+An open-source reimagining of multi-model AI deliberation. Assemble up to **7 AI models** as a council. Assign each a persona (e.g. The Analyst, The Skeptic, The Futurist). Ask a question. Watch them debate in 3 structured rounds. Let the **Chairman** synthesize the final verdict.
 
-Assemble up to **7 AI models** as a council. Assign each a persona (e.g. The Analyst, The Skeptic, The Futurist). Ask a question. Watch them debate in 3 structured rounds. Let the **Chairman** synthesize the final verdict.
+Inspired by Andrej Karpathy's LLM Council concept — built with named personas, non-anonymous peer review, and user-controlled round progression.
 
 ---
 
@@ -34,13 +32,13 @@ After Round 3, you can enter a new prompt. The next round starts fresh — but e
 
 ### Prerequisites
 - Node.js 18+
-- An [OpenRouter API key](https://openrouter.ai/keys) (free tier available)
+- An [OpenRouter API key](https://openrouter.ai/keys) (free tier available — many models are completely free)
 
 ### Run Locally
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/llm-council
-cd llm-council
+git clone https://github.com/RohanBors/Debate_Dock
+cd Debate_Dock
 npm install
 npm run dev
 ```
@@ -49,23 +47,18 @@ Open [http://localhost:3000](http://localhost:3000)
 
 ### Deploy to Vercel
 
-Click the "Deploy with Vercel" button above, or:
-
-```bash
-npm install -g vercel
-vercel
-```
+Fork this repository, connect it to [Vercel](https://vercel.com), and deploy in one click. No environment variables required — the API key is stored securely in the user's browser.
 
 ---
 
 ## Features
 
-- 🆓 **Free model highlighting** — models with $0 cost are badged so anyone can use the tool
-- 🎭 **Custom personas** — name each council seat anything you want
-- ⚡ **Streaming responses** — text appears live as models generate
-- 💾 **Local storage** — your API key and session history never leave your browser
-- 📤 **Markdown export** — download the full session transcript
-- 🔗 **Any model** — pick from the full OpenRouter catalogue (300+ models)
+- **Free model highlighting** — models with $0 cost are badged so anyone can use the tool without spending money
+- **Custom personas** — name each council seat anything you want
+- **Streaming responses** — text appears live as models generate
+- **Local storage** — your API key and session history never leave your browser
+- **Markdown export** — download the full session transcript
+- **Any model** — pick from the full OpenRouter catalogue (300+ models)
 
 ---
 
@@ -74,7 +67,8 @@ vercel
 - **Next.js 16** — framework + API routes
 - **Tailwind CSS** — styling
 - **Zustand** — state management
-- **OpenRouter API** — unified access to all major LLMs
+- **OpenRouter API** — unified access to all major LLMs (Claude, GPT, Gemini, Llama, Mistral & more)
+- **tsParticles** — interactive particle background
 
 ---
 
@@ -86,4 +80,4 @@ PRs welcome. This is an open source project — fork it, remix it, make it yours
 
 ## License
 
-MIT © 2025
+MIT © 2025 Rohan Borse

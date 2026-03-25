@@ -95,12 +95,12 @@ export default function HomePage() {
         {/* Round flow preview */}
         <div className="mt-20 grid grid-cols-3 gap-4 text-left">
           {[
-            { round: 'Round 1', label: 'Opening Statements', desc: 'Each councillor speaks independently', icon: '🎙️' },
-            { round: 'Round 2', label: 'Rebuttals', desc: 'Models read each other and respond', icon: '⚔️' },
-            { round: 'Round 3', label: 'Chairman Synthesis', desc: 'Final verdict distilled from all voices', icon: '👑' },
+            { round: 'Round 1', label: 'Opening Statements', desc: 'Each councillor speaks independently', icon: null, num: '01' },
+            { round: 'Round 2', label: 'Rebuttals', desc: 'Models read each other and respond', icon: null, num: '02' },
+            { round: 'Round 3', label: 'Chairman Synthesis', desc: 'Final verdict distilled from all voices', icon: null, num: '03' },
           ].map((r) => (
             <div key={r.round} className="council-card p-5 hover:border-council-accent transition-all duration-300 hover:shadow-[0_0_20px_rgba(204,255,0,0.1)] hover:-translate-y-1">
-              <div className="text-2xl mb-3">{r.icon}</div>
+              <div className="text-xs font-black text-council-accent tracking-widest mb-3" style={{ fontFamily: 'var(--font-sora)' }}>{r.num}</div>
               <div className="text-xs font-bold text-council-accent uppercase tracking-widest mb-1.5">{r.round}</div>
               <div className="text-sm font-semibold text-white mb-2">{r.label}</div>
               <div className="text-xs text-council-muted leading-relaxed">{r.desc}</div>

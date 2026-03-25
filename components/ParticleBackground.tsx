@@ -35,8 +35,8 @@ export default function ParticleBackground({ variant = "default" }: { variant?: 
           },
           modes: {
             grab: {
-              distance: isExpanded ? 220 : 160,
-              links: { opacity: isExpanded ? 0.35 : 0.25 },
+              distance: isExpanded ? 180 : 140,
+              links: { opacity: isExpanded ? 0.45 : 0.35 },
             },
             repulse: {
               distance: 120,
@@ -49,10 +49,10 @@ export default function ParticleBackground({ variant = "default" }: { variant?: 
           color: { value: "#ccff00" },
           links: {
             color: "#ccff00",
-            distance: isExpanded ? 220 : 160,
+            distance: isExpanded ? 170 : 130,
             enable: true,
-            opacity: isExpanded ? 0.1 : 0.13,
-            width: isExpanded ? 0.8 : 1,
+            opacity: isExpanded ? 0.18 : 0.2,
+            width: isExpanded ? 0.9 : 1,
           },
           move: {
             direction: "none",
@@ -64,12 +64,12 @@ export default function ParticleBackground({ variant = "default" }: { variant?: 
             attract: { enable: true, rotate: { x: 600, y: 1200 } },
           },
           number: {
-            density: { enable: true, width: isExpanded ? 1400 : 900, height: isExpanded ? 1400 : 900 },
-            value: isExpanded ? 90 : 110,
+            density: { enable: true, width: isExpanded ? 1100 : 800, height: isExpanded ? 1100 : 800 },
+            value: isExpanded ? 110 : 130,
           },
           opacity: {
-            value: { min: 0.2, max: isExpanded ? 0.5 : 0.45 },
-            animation: { enable: true, speed: 0.6, sync: false },
+            value: { min: 0.3, max: isExpanded ? 0.65 : 0.6 },
+            animation: { enable: true, speed: 0.5, sync: false },
           },
           shape: { type: "circle" },
           size: { value: { min: 1, max: isExpanded ? 2 : 2.5 } },
