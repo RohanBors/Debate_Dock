@@ -5,7 +5,8 @@ import Particles, { initParticlesEngine } from "@tsparticles/react";
 import { loadSlim } from "@tsparticles/slim";
 import type { Engine } from "@tsparticles/engine";
 
-export default function ParticleBackground() {
+// variant: "expanded" for landing page (sparse, wide mesh), "default" for settings
+export default function ParticleBackground({ variant = "default" }: { variant?: "expanded" | "default" }) {
   const [init, setInit] = useState(false);
 
   useEffect(() => {
@@ -18,75 +19,60 @@ export default function ParticleBackground() {
 
   if (!init) return null;
 
+  const isExpanded = variant === "expanded";
+
   return (
     <Particles
-      id="tsparticles"
+      id={`tsparticles-${variant}`}
       className="absolute inset-0 w-full h-full -z-0 pointer-events-auto"
       options={{
-        background: {
-          color: {
-            value: "transparent",
-          },
-        },
-        fpsLimit: 120,
+        background: { color: { value: "transparent" } },
+        fpsLimit: 60,
+        smooth: true,
         interactivity: {
           events: {
-            onHover: {
-              enable: true,
-              mode: "repulse",
-            },
+            onHover: { enable: true, mode: "grab" },
           },
           modes: {
-            repulse: {
-              distance: 100,
-              duration: 0.4,
-            },
             grab: {
-              distance: 150,
-              links: {
-                opacity: 0.5,
-              },
+              distance: isExpanded ? 220 : 160,
+              links: { opacity: isExpanded ? 0.35 : 0.25 },
+            },
+            repulse: {
+              distance: 120,
+              duration: 0.6,
+              easing: "ease-out-quad",
             },
           },
         },
         particles: {
-          color: {
-            value: "#ccff00",
-          },
+          color: { value: "#ccff00" },
           links: {
             color: "#ccff00",
-            distance: 150,
+            distance: isExpanded ? 220 : 160,
             enable: true,
-            opacity: 0.15,
-            width: 1,
+            opacity: isExpanded ? 0.1 : 0.13,
+            width: isExpanded ? 0.8 : 1,
           },
           move: {
             direction: "none",
             enable: true,
-            outModes: {
-              default: "bounce",
-            },
+            outModes: { default: "out" },
             random: true,
-            speed: 0.8,
+            speed: isExpanded ? 0.4 : 0.6,
             straight: false,
+            attract: { enable: true, rotate: { x: 600, y: 1200 } },
           },
           number: {
-            density: {
-              enable: true,
-              width: 800,
-              height: 800,
-            },
-            value: 120,
+            density: { enable: true, width: isExpanded ? 1400 : 900, height: isExpanded ? 1400 : 900 },
+            value: isExpanded ? 90 : 110,
           },
           opacity: {
-            value: 0.4,
+            value: { min: 0.2, max: isExpanded ? 0.5 : 0.45 },
+            animation: { enable: true, speed: 0.6, sync: false },
           },
-          shape: {
-            type: "circle",
-          },
-          size: {
-            value: { min: 1, max: 2.5 },
-          },
+          shape: { type: "circle" },
+          size: { value: { min: 1, max: isExpanded ? 2 : 2.5 } },
         },
         detectRetina: true,
       }}

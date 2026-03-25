@@ -28,7 +28,7 @@ export default function HomePage() {
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-center relative overflow-hidden px-4">
-      <ParticleBackground />
+      <ParticleBackground variant="expanded" />
       {/* Background glow */}
       <div className="absolute inset-0 bg-council-glow pointer-events-none" />
       <div
@@ -48,7 +48,7 @@ export default function HomePage() {
         {/* Title */}
         <h1 className="text-6xl md:text-7xl font-extrabold mb-4"
           style={{ background: 'linear-gradient(135deg, #ffffff 30%, #ccff00 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', textShadow: '0 0 40px rgba(204,255,0,0.2)' }}>
-          LLM Council
+          Debate Dock
         </h1>
 
         {/* Rotating tagline */}
@@ -75,10 +75,10 @@ export default function HomePage() {
               boxShadow: '0 0 25px rgba(204,255,0,0.3)',
             }}
           >
-            Assemble Your Council →
+            Assemble Your Dock →
           </Link>
           <a
-            href="https://github.com"
+            href="https://github.com/RohanBors/Debate_Dock"
             target="_blank"
             rel="noopener noreferrer"
             className="px-8 py-4 rounded-xl font-semibold transition-all duration-200 hover:scale-105"

@@ -299,7 +299,7 @@ export default function CouncilPage() {
         style={{ background: '#09090b', borderColor: '#22222a' }}
       >
         <div className="p-4 border-b" style={{ borderColor: '#2a2a3a' }}>
-          <h1 className="font-bold text-white text-sm">LLM Council</h1>
+          <h1 className="font-bold text-white text-sm">Debate Dock</h1>
           <p className="text-xs text-council-muted mt-0.5">{turns.length} turn{turns.length !== 1 ? 's' : ''}</p>
         </div>
 
