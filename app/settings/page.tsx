@@ -100,8 +100,10 @@ export default function SettingsPage() {
   };
 
   return (
-    <main className="min-h-screen px-4 py-12 max-w-7xl mx-auto">
-      {/* Header */}
+    <div className="min-h-screen relative overflow-hidden">
+      <ParticleBackground />
+      <main className="relative z-10 px-4 py-12 max-w-7xl mx-auto">
+        {/* Header */}
       <div className="mb-10">
         <a href="/" className="text-council-muted text-sm hover:text-council-accent transition-colors mb-4 inline-block">
           ← Back to Home
@@ -304,6 +306,7 @@ export default function SettingsPage() {
           Convene the Council →
         </button>
       </div>
-    </main>
+      </main>
+    </div>
   );
 }

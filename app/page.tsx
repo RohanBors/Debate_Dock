@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
+import ParticleBackground from '@/components/ParticleBackground';
 
 const TAGLINES = [
   'Seven minds. One truth.',
@@ -27,6 +28,7 @@ export default function HomePage() {
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-center relative overflow-hidden px-4">
+      <ParticleBackground />
       {/* Background glow */}
       <div className="absolute inset-0 bg-council-glow pointer-events-none" />
       <div
