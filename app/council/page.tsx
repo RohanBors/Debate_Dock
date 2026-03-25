@@ -61,11 +61,24 @@ function CouncillorBubble({
         )}
       </div>
       <div
-        className="rounded-xl p-4 text-sm text-council-text/90 leading-relaxed whitespace-pre-wrap"
-        style={{ background: '#13131a', border: `1px solid ${councillor.color}33` }}
+        className="rounded-xl p-4 text-sm leading-relaxed whitespace-pre-wrap"
+        style={{ background: '#0d0d10', border: `1px solid ${councillor.color}33` }}
       >
-        {content || ''}
-        {streaming && <span className="cursor-blink" />}
+        {!content && streaming ? (
+          <span className="text-council-muted text-xs flex items-center gap-2">
+            <span className="inline-flex gap-[3px] items-end h-3">
+              <span className="w-[3px] h-full bg-council-muted animate-wave-bar rounded-full" style={{ animationDelay: '0ms' }} />
+              <span className="w-[3px] h-full bg-council-muted animate-wave-bar rounded-full" style={{ animationDelay: '200ms' }} />
+              <span className="w-[3px] h-full bg-council-muted animate-wave-bar rounded-full" style={{ animationDelay: '400ms' }} />
+            </span>
+            {councillor.persona} is thinking…
+          </span>
+        ) : (
+          <span className="text-council-text/90">
+            {content || ''}
+            {streaming && <span className="cursor-blink" />}
+          </span>
+        )}
       </div>
     </div>
   );

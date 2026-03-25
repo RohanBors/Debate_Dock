@@ -109,7 +109,7 @@ export default function SettingsPage() {
         <a href="/" className="text-council-muted text-sm hover:text-council-accent transition-colors mb-4 inline-block">
           ← Back to Home
         </a>
-        <h1 className="text-4xl font-bold text-white mb-2">Council Setup</h1>
+        <h1 className="text-4xl font-bold text-white mb-2">Build your own Council</h1>
         <p className="text-council-muted">Configure your API key, select models, and assign personas.</p>
       </div>
 

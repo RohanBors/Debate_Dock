@@ -75,7 +75,7 @@ export default function HomePage() {
               boxShadow: '0 0 25px rgba(204,255,0,0.3)',
             }}
           >
-            Assemble Your Dock →
+            Open your Dock →
           </Link>
           <a
             href="https://github.com/RohanBors/Debate_Dock"
