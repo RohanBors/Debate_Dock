@@ -45,13 +45,20 @@ function CouncillorBubble({
   roundLabel: string;
 }) {
   return (
-    <div className="animate-slide-up">
+    <div className="animate-message-pop origin-bottom-left">
       <div className="flex items-center gap-2 mb-2">
         <div className="w-2.5 h-2.5 rounded-full" style={{ background: councillor.color }} />
         <span className="text-xs font-semibold" style={{ color: councillor.color }}>
           {councillor.persona}
         </span>
         <span className="text-xs text-council-muted">· {roundLabel}</span>
+        {streaming && (
+          <div className="flex gap-[2px] ml-2 items-end h-2.5">
+            <div className="w-[3px] h-full bg-council-accent animate-wave-bar" style={{ animationDelay: '0ms' }} />
+            <div className="w-[3px] h-full bg-council-accent animate-wave-bar" style={{ animationDelay: '250ms' }} />
+            <div className="w-[3px] h-full bg-council-accent animate-wave-bar" style={{ animationDelay: '500ms' }} />
+          </div>
+        )}
       </div>
       <div
         className="rounded-xl p-4 text-sm text-council-text/90 leading-relaxed whitespace-pre-wrap"
@@ -285,7 +292,7 @@ export default function CouncilPage() {
     r === 1 ? 'Opening Statement' : r === 2 ? 'Rebuttal' : 'Chairman Synthesis';
 
   return (
-    <div className="flex h-screen" style={{ background: '#000000' }}>
+    <div className="flex h-screen relative bg-grid" style={{ background: '#000000' }}>
       {/* ── Sidebar ── */}
       <aside
         className="w-64 shrink-0 border-r flex flex-col overflow-y-auto"

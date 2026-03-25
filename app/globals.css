@@ -64,3 +64,16 @@ body {
   animation: blink 1s step-end infinite;
   color: var(--accent);
 }
+
+.bg-grid {
+  background-size: 40px 40px;
+  background-image: 
+    linear-gradient(to right, rgba(204, 255, 0, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(204, 255, 0, 0.04) 1px, transparent 1px);
+  animation: pan-grid 60s linear infinite;
+}
+
+@keyframes pan-grid {
+  0% { background-position: 0 0; }
+  100% { background-position: 40px 40px; }
+}

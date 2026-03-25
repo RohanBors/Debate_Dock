@@ -35,6 +35,9 @@ module.exports = {
         'slide-up': 'slideUp 0.5s ease-out forwards',
         'float': 'float 6s ease-in-out infinite',
         'glow-pulse': 'glowPulse 3s ease-in-out infinite',
+        'border-spin': 'borderSpin 4s linear infinite',
+        'message-pop': 'messagePop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards',
+        'wave-bar': 'waveBar 1s ease-in-out infinite',
       },
       keyframes: {
         fadeIn: {
@@ -52,6 +55,17 @@ module.exports = {
         glowPulse: {
           '0%, 100%': { opacity: '0.4' },
           '50%': { opacity: '0.8' },
+        },
+        borderSpin: {
+          '100%': { transform: 'rotate(360deg)' },
+        },
+        messagePop: {
+          '0%': { opacity: '0', transform: 'scale(0.95) translateY(10px)' },
+          '100%': { opacity: '1', transform: 'scale(1) translateY(0)' },
+        },
+        waveBar: {
+          '0%, 100%': { transform: 'scaleY(0.4)' },
+          '50%': { transform: 'scaleY(1)' },
         },
       },
     },
