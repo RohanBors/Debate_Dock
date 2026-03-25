@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useCouncilStore, Councillor, COLOURS } from '@/store/councilStore';
 import { fetchModels, OpenRouterModel } from '@/lib/openrouter';
+import ParticleBackground from '@/components/ParticleBackground';
 
 const DEFAULT_PERSONAS = [
   'The Analyst',

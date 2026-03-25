@@ -1,7 +1,21 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  body {
+    font-family: var(--font-inter), sans-serif;
+    font-weight: 500;
+    line-height: 1.6;
+    letter-spacing: -0.01em;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-sora), sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.035em;
+    line-height: 1.2;
+  }
+}
 
 :root {
   --bg: #000000;
@@ -22,7 +36,6 @@ html,
 body {
   background-color: var(--bg);
   color: #e8e8f0;
-  font-family: 'Inter', sans-serif;
   min-height: 100vh;
   scroll-behavior: smooth;
 }
