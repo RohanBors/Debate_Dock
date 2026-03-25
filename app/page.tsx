@@ -30,22 +30,22 @@ export default function HomePage() {
       {/* Background glow */}
       <div className="absolute inset-0 bg-council-glow pointer-events-none" />
       <div
-        className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full opacity-10 blur-3xl pointer-events-none"
-        style={{ background: 'radial-gradient(circle, #6c63ff 0%, transparent 70%)' }}
+        className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full opacity-10 blur-3xl pointer-events-none animate-float"
+        style={{ background: 'radial-gradient(circle, #ccff00 0%, transparent 70%)' }}
       />
 
       {/* Content */}
       <div className="relative z-10 text-center max-w-3xl animate-fade-in">
         {/* Badge */}
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium mb-8"
-          style={{ background: 'rgba(108,99,255,0.15)', border: '1px solid rgba(108,99,255,0.3)', color: '#a29bff' }}>
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium mb-8 border transition-all hover:border-council-accent hover:shadow-[0_0_15px_rgba(204,255,0,0.3)]"
+          style={{ background: 'rgba(204,255,0,0.05)', border: '1px solid rgba(204,255,0,0.2)', color: '#ccff00' }}>
           <span className="w-1.5 h-1.5 rounded-full bg-council-accent animate-pulse-slow inline-block" />
           Open Source · Powered by OpenRouter
         </div>
 
         {/* Title */}
-        <h1 className="text-6xl md:text-7xl font-extrabold mb-4 text-glow"
-          style={{ background: 'linear-gradient(135deg, #ffffff 30%, #a29bff 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+        <h1 className="text-6xl md:text-7xl font-extrabold mb-4"
+          style={{ background: 'linear-gradient(135deg, #ffffff 30%, #ccff00 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', textShadow: '0 0 40px rgba(204,255,0,0.2)' }}>
           LLM Council
         </h1>
 
@@ -55,21 +55,22 @@ export default function HomePage() {
         </p>
 
         {/* Description */}
-        <p className="text-council-text/70 max-w-xl mx-auto mb-12 leading-relaxed">
-          Assemble up to <span className="text-council-accent font-semibold">7 AI models</span> as a council. Assign each a{' '}
-          <span className="text-council-gold font-semibold">persona</span>. Run structured{' '}
+        <p className="text-council-text/70 max-w-xl mx-auto mb-12 leading-relaxed text-lg">
+          Assemble up to <span className="text-council-accent font-semibold tracking-wide">7 AI models</span> as a council. Assign each a{' '}
+          <span className="text-white font-semibold">persona</span>. Run structured{' '}
           <span className="text-white font-semibold">3-round debates</span>. Let the{' '}
-          <span className="text-council-gold font-semibold">Chairman</span> synthesize the truth.
+          <span className="text-council-accent font-semibold tracking-wide">Chairman</span> synthesize the truth.
         </p>
 
         {/* CTA */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Link
             href="/settings"
-            className="px-8 py-4 rounded-xl font-semibold text-white transition-all duration-200 hover:scale-105 hover:shadow-lg"
+            className="px-8 py-4 rounded-xl font-bold transition-all duration-300 hover:scale-105"
             style={{
-              background: 'linear-gradient(135deg, #6c63ff, #8b5cf6)',
-              boxShadow: '0 0 30px rgba(108,99,255,0.3)',
+              background: '#ccff00',
+              color: '#000000',
+              boxShadow: '0 0 25px rgba(204,255,0,0.3)',
             }}
           >
             Assemble Your Council →
@@ -96,10 +97,10 @@ export default function HomePage() {
             { round: 'Round 2', label: 'Rebuttals', desc: 'Models read each other and respond', icon: '⚔️' },
             { round: 'Round 3', label: 'Chairman Synthesis', desc: 'Final verdict distilled from all voices', icon: '👑' },
           ].map((r) => (
-            <div key={r.round} className="council-card p-4 hover:border-council-accent/50 transition-colors duration-300">
-              <div className="text-2xl mb-2">{r.icon}</div>
-              <div className="text-xs font-semibold text-council-accent uppercase tracking-wider mb-1">{r.round}</div>
-              <div className="text-sm font-semibold text-council-text mb-1">{r.label}</div>
+            <div key={r.round} className="council-card p-5 hover:border-council-accent transition-all duration-300 hover:shadow-[0_0_20px_rgba(204,255,0,0.1)] hover:-translate-y-1">
+              <div className="text-2xl mb-3">{r.icon}</div>
+              <div className="text-xs font-bold text-council-accent uppercase tracking-widest mb-1.5">{r.round}</div>
+              <div className="text-sm font-semibold text-white mb-2">{r.label}</div>
               <div className="text-xs text-council-muted leading-relaxed">{r.desc}</div>
             </div>
           ))}

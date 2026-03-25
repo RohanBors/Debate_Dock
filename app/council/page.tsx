@@ -69,8 +69,8 @@ function ChairmanPanel({ content, streaming }: { content: string; streaming?: bo
     <div
       className="rounded-2xl p-6 animate-slide-up"
       style={{
-        background: 'linear-gradient(135deg, rgba(245,200,66,0.08) 0%, rgba(108,99,255,0.08) 100%)',
-        border: '1px solid rgba(245,200,66,0.3)',
+        background: 'radial-gradient(ellipse at top left, rgba(204,255,0,0.1) 0%, #000000 100%)',
+        border: '1px solid rgba(204,255,0,0.3)',
       }}
     >
       <div className="flex items-center gap-2 mb-4">
@@ -285,11 +285,11 @@ export default function CouncilPage() {
     r === 1 ? 'Opening Statement' : r === 2 ? 'Rebuttal' : 'Chairman Synthesis';
 
   return (
-    <div className="flex h-screen" style={{ background: '#0a0a0f' }}>
+    <div className="flex h-screen" style={{ background: '#000000' }}>
       {/* ── Sidebar ── */}
       <aside
         className="w-64 shrink-0 border-r flex flex-col overflow-y-auto"
-        style={{ background: '#13131a', borderColor: '#2a2a3a' }}
+        style={{ background: '#09090b', borderColor: '#22222a' }}
       >
         <div className="p-4 border-b" style={{ borderColor: '#2a2a3a' }}>
           <h1 className="font-bold text-white text-sm">LLM Council</h1>
@@ -319,7 +319,7 @@ export default function CouncilPage() {
               <div
                 key={i}
                 className="px-2 py-1.5 rounded text-xs text-council-muted mb-1 truncate"
-                style={{ background: i === activeTurnIndex ? 'rgba(108,99,255,0.1)' : 'transparent' }}
+                style={{ background: i === activeTurnIndex ? 'rgba(204,255,0,0.1)' : 'transparent', color: i === activeTurnIndex ? '#ccff00' : '' }}
               >
                 {t.userPrompt.slice(0, 40)}{t.userPrompt.length > 40 ? '…' : ''}
               </div>
@@ -442,13 +442,11 @@ export default function CouncilPage() {
                 <div className="flex justify-center pt-2">
                   <button
                     onClick={handleNextRound}
-                    className="px-8 py-3 rounded-xl font-semibold text-sm transition-all hover:scale-105"
+                    className="px-8 py-3 rounded-xl font-bold text-sm transition-all hover:scale-105"
                     style={{
-                      background: activeTurn.completedRounds === 1
-                        ? 'linear-gradient(135deg, #f59e0b, #d97706)'
-                        : 'linear-gradient(135deg, #f5c842, #d97706)',
-                      color: '#0a0a0f',
-                      boxShadow: '0 0 30px rgba(245, 200, 66, 0.25)',
+                      background: '#ccff00',
+                      color: '#000000',
+                      boxShadow: '0 0 30px rgba(204, 255, 0, 0.25)',
                     }}
                   >
                     {activeTurn.completedRounds === 1 ? '⚔️ Start Round 2 — Rebuttals' : '👑 Start Round 3 — Chairman Synthesis'}
@@ -473,8 +471,8 @@ export default function CouncilPage() {
                       const a = document.createElement('a');
                       a.href = url; a.download = 'council-session.md'; a.click();
                     }}
-                    className="px-6 py-2 rounded-lg text-sm font-medium transition-all hover:opacity-80"
-                    style={{ background: 'rgba(108,99,255,0.15)', border: '1px solid rgba(108,99,255,0.3)', color: '#a29bff' }}
+                    className="px-6 py-2 rounded-lg text-sm font-bold transition-all hover:shadow-[0_0_15px_rgba(204,255,0,0.2)]"
+                    style={{ background: 'rgba(204,255,0,0.05)', border: '1px solid rgba(204,255,0,0.2)', color: '#ccff00' }}
                   >
                     ↓ Export Session as Markdown
                   </button>
@@ -524,8 +522,8 @@ export default function CouncilPage() {
             <button
               onClick={handleSubmit}
               disabled={isRunning || !prompt.trim() || (!!activeTurn && activeTurn.completedRounds > 0 && activeTurn.completedRounds < 3)}
-              className="px-5 py-3 rounded-xl font-semibold text-white text-sm transition-all hover:scale-105 disabled:opacity-30 disabled:hover:scale-100"
-              style={{ background: 'linear-gradient(135deg, #6c63ff, #8b5cf6)' }}
+              className="px-5 py-3 rounded-xl font-bold text-sm transition-all hover:scale-105 hover:shadow-[0_0_20px_rgba(204,255,0,0.3)] disabled:opacity-30 disabled:hover:scale-100 disabled:hover:shadow-none delay-75"
+              style={{ background: '#ccff00', color: '#000000' }}
             >
               Send
             </button>

@@ -135,8 +135,8 @@ export default function SettingsPage() {
           <button
             onClick={loadModels}
             disabled={!keyInput.trim() || loadingModels}
-            className="px-6 py-3 rounded-lg font-semibold text-white text-sm transition-all disabled:opacity-40"
-            style={{ background: 'linear-gradient(135deg, #6c63ff, #8b5cf6)' }}
+            className="px-6 py-3 rounded-lg font-bold text-sm transition-all disabled:opacity-40"
+            style={{ background: '#ccff00', color: '#000000', boxShadow: '0 0 15px rgba(204,255,0,0.2)' }}
           >
             {loadingModels ? 'Loading…' : 'Load Models'}
           </button>
@@ -188,9 +188,9 @@ export default function SettingsPage() {
                 disabled={models.length === 0}
                 className="w-full text-left px-3 py-2 rounded-lg text-sm mb-3 transition-colors disabled:opacity-40"
                 style={{
-                  background: slot.modelId ? 'rgba(108,99,255,0.1)' : '#0a0a0f',
-                  border: `1px solid ${slot.modelId ? slot.color + '66' : '#2a2a3a'}`,
-                  color: slot.modelId ? '#e8e8f0' : '#7a7a9a',
+                  background: slot.modelId ? 'rgba(204,255,0,0.05)' : '#000000',
+                  border: `1px solid ${slot.modelId ? slot.color + '66' : '#22222a'}`,
+                  color: slot.modelId ? '#ffffff' : '#8b8b99',
                 }}
               >
                 {slot.modelId ? (
@@ -281,10 +281,11 @@ export default function SettingsPage() {
         <button
           onClick={handleLaunch}
           disabled={!canProceed}
-          className="px-10 py-4 rounded-xl font-bold text-white text-base transition-all disabled:opacity-30 hover:scale-105"
+          className="px-10 py-4 rounded-xl font-bold text-base transition-all disabled:opacity-30 hover:scale-105"
           style={{
-            background: canProceed ? 'linear-gradient(135deg, #6c63ff, #8b5cf6)' : '#2a2a3a',
-            boxShadow: canProceed ? '0 0 40px rgba(108,99,255,0.35)' : 'none',
+            background: canProceed ? '#ccff00' : '#22222a',
+            color: canProceed ? '#000000' : '#8b8b99',
+            boxShadow: canProceed ? '0 0 30px rgba(204,255,0,0.3)' : 'none',
           }}
         >
           Convene the Council →

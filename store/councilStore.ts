@@ -49,8 +49,8 @@ export type CouncilState = {
 };
 
 const COLOURS = [
-  '#6c63ff', '#f59e0b', '#10b981', '#ef4444',
-  '#3b82f6', '#ec4899', '#f5c842',
+  '#ccff00', '#00e5ff', '#ff007f', '#ffaa00',
+  '#b142ff', '#39ff14', '#ffffff',
 ];
 
 export const useCouncilStore = create<CouncilState>()(
