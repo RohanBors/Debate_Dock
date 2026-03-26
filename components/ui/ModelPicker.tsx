@@ -92,9 +92,11 @@ export default function ModelPicker({
                     )}
                   </div>
                   <div className="flex items-center gap-3 mt-3 pt-3" style={{ borderTop: '1px dashed rgba(255,255,255,0.05)' }}>
-                    <div className="text-[11px] text-gray-400">
-                      <span className="font-semibold text-gray-300">{(m.context_length / 1000).toFixed(0)}k</span> ctx
-                    </div>
+                    {m.context_length !== undefined && (
+                      <div className="text-[11px] text-gray-400">
+                        <span className="font-semibold text-gray-300">{(m.context_length / 1000).toFixed(0)}k</span> ctx
+                      </div>
+                    )}
                   </div>
                 </button>
               ))}

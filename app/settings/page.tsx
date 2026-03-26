@@ -77,7 +77,7 @@ export default function SettingsPage() {
   }, [keyInput, setApiKey]);
 
   const handleLaunch = () => {
-    setCouncillors(slots.map((s, i) => ({ id: \`slot-\${i}\`, ...s })));
+    setCouncillors(slots.map((s, i) => ({ id: `slot-${i}`, ...s })));
     router.push('/council');
   };
 
@@ -165,7 +165,7 @@ export default function SettingsPage() {
         {/* Top 6 Debaters */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
           {slots.slice(0, 6).map((slot, idx) => (
-            <div key={idx} className="bg-[#0D0D11] rounded-2xl p-6 relative group transition-all" style={{ borderTop: \`4px solid \${slot.color}\`, boxShadow: '0 4px 20px rgba(0,0,0,0.5)' }}>
+            <div key={idx} className="bg-[#0D0D11] rounded-2xl p-6 relative group transition-all" style={{ borderTop: `4px solid ${slot.color}`, boxShadow: '0 4px 20px rgba(0,0,0,0.5)' }}>
               
               {/* Persona Inline Edit */}
               <div className="mb-5 flex items-center gap-2 group/title cursor-text" onClick={() => setEditingPersona(idx)}>
