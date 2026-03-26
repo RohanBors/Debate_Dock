@@ -39,13 +39,25 @@ export async function callModel({
   apiKey,
   modelId,
   messages,
+  useWebSearch,
   onChunk,
 }: {
   apiKey: string;
   modelId: string;
   messages: { role: 'system' | 'user' | 'assistant'; content: string }[];
+  useWebSearch?: boolean;
   onChunk?: (chunk: string) => void;
 }): Promise<string> {
+  const body: any = {
+    model: modelId,
+    messages,
+    stream: !!onChunk,
+  };
+
+  if (useWebSearch) {
+    body.plugins = [{ id: 'web', max_results: 5 }];
+  }
+
   const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
     method: 'POST',
     headers: {
@@ -54,11 +66,7 @@ export async function callModel({
       'HTTP-Referer': 'https://llm-council.vercel.app',
       'X-Title': 'LLM Council',
     },
-    body: JSON.stringify({
-      model: modelId,
-      messages,
-      stream: !!onChunk,
-    }),
+    body: JSON.stringify(body),
   });
 
   if (!res.ok) {

@@ -29,6 +29,8 @@ export type CouncilState = {
   // Settings
   apiKey: string;
   setApiKey: (key: string) => void;
+  useWebSearch: boolean;
+  setUseWebSearch: (val: boolean) => void;
 
   // Council setup
   councillors: Councillor[];
@@ -58,6 +60,8 @@ export const useCouncilStore = create<CouncilState>()(
     (set, get) => ({
       apiKey: '',
       setApiKey: (key) => set({ apiKey: key }),
+      useWebSearch: false,
+      setUseWebSearch: (val) => set({ useWebSearch: val }),
 
       councillors: [],
       setCouncillors: (c) => set({ councillors: c }),
@@ -131,6 +135,7 @@ export const useCouncilStore = create<CouncilState>()(
       name: 'llm-council-storage',
       partialize: (s) => ({
         apiKey: s.apiKey,
+        useWebSearch: s.useWebSearch,
         councillors: s.councillors,
         turns: s.turns,
         activeTurnIndex: s.activeTurnIndex,

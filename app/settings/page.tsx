@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { useCouncilStore, Councillor, COLOURS } from '@/store/councilStore';
 import { fetchModels, OpenRouterModel } from '@/lib/openrouter';
-import { Github, Crown, Check, Loader2, Edit2 } from 'lucide-react';
+import { Github, Crown, Check, Loader2, Edit2, Globe } from 'lucide-react';
 import ModelPicker from '@/components/ui/ModelPicker';
 
 const DEFAULT_PERSONAS = [
@@ -21,7 +21,7 @@ const SLOT_COUNT = 7;
 
 export default function SettingsPage() {
   const router = useRouter();
-  const { apiKey, setApiKey, councillors, setCouncillors } = useCouncilStore();
+  const { apiKey, setApiKey, useWebSearch, setUseWebSearch, councillors, setCouncillors } = useCouncilStore();
 
   const [keyInput, setKeyInput] = useState(apiKey);
   const [models, setModels] = useState<OpenRouterModel[]>([]);
@@ -154,6 +154,22 @@ export default function SettingsPage() {
             </div>
           </div>
           {modelError && <div className="mt-3 text-red-400 text-sm font-medium pl-1">{modelError}</div>}
+          
+          <div className="mt-6 pt-5 border-t border-white/5 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <Globe className={`w-5 h-5 ${useWebSearch ? 'text-[#ccff00]' : 'text-gray-500'}`} />
+              <div>
+                <div className="text-sm font-bold text-white mb-0.5">Live Web Search Grounding</div>
+                <div className="text-[13px] text-gray-400">Enable OpenRouter web search to let models access current internet data.</div>
+              </div>
+            </div>
+            <button
+              onClick={() => setUseWebSearch(!useWebSearch)}
+              className={`w-12 h-6 rounded-full transition-colors relative ${useWebSearch ? 'bg-[#ccff00]' : 'bg-white/10'}`}
+            >
+              <div className={`w-4 h-4 bg-black rounded-full absolute top-1 transition-all ${useWebSearch ? 'left-7' : 'left-1 bg-gray-400'}`} />
+            </button>
+          </div>
         </div>
 
         {/* ── Council Grid ── */}

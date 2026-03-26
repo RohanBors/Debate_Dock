@@ -7,7 +7,8 @@ import { callModel } from '@/lib/openrouter';
 
 // ─── Persona system prompts ────────────────────────────────────────────────
 function buildSystemPrompt(councillor: Councillor, previousChairmanSummary: string | null): string {
-  const base = `You are "${councillor.persona}", a council member in a structured AI deliberation.`;
+  const dateStr = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+  const base = `You are "${councillor.persona}", a council member in a structured AI deliberation.\nToday's date is ${dateStr}. Always consider recent events, macroeconomic conditions, and news up to this exact date.`;
   const context = previousChairmanSummary
     ? `\n\nThis is not the first discussion. The Chairman's synthesis from the previous round of discussion was:\n"""\n${previousChairmanSummary}\n"""\nUse this as background context when forming your views.`
     : '';
@@ -15,10 +16,11 @@ function buildSystemPrompt(councillor: Councillor, previousChairmanSummary: stri
 }
 
 function buildChairmanPrompt(transcript: string, previousChairmanSummary: string | null): string {
+  const dateStr = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
   const context = previousChairmanSummary
     ? `Previous discussion summary:\n"""\n${previousChairmanSummary}\n"""\n\n`
     : '';
-  return `You are the Chairman of this council. ${context}Below is the full transcript of the deliberation across two rounds:\n\n${transcript}\n\nYour task:\n1. Synthesize the strongest insights from all council members.\n2. Note key points of agreement and meaningful disagreements.\n3. Provide a clear, actionable final synthesis (3-5 paragraphs).\n4. End with a "Chairman's Verdict" — a single bold conclusion.\n\nBe authoritative, fair, and decisive.`;
+  return `You are the Chairman of this council. Today's date is ${dateStr}. ${context}Below is the full transcript of the deliberation across two rounds:\n\n${transcript}\n\nYour task:\n1. Synthesize the strongest insights from all council members.\n2. Note key points of agreement and meaningful disagreements.\n3. Provide a clear, actionable final synthesis (3-5 paragraphs).\n4. End with a "Chairman's Verdict" — a single bold conclusion.\n\nBe authoritative, fair, and decisive.`;
 }
 
 // ─── Helper: build transcript string ───────────────────────────────────────
@@ -112,7 +114,7 @@ function ChairmanPanel({ content, streaming }: { content: string; streaming?: bo
 export default function CouncilPage() {
   const router = useRouter();
   const {
-    apiKey, councillors, turns, activeTurnIndex,
+    apiKey, useWebSearch, councillors, turns, activeTurnIndex,
     addTurn, appendMessage, updateMessageContent,
     setChairmanSummary, setCompletedRounds,
     getPreviousChairmanSummary, resetSession,
@@ -153,6 +155,7 @@ export default function CouncilPage() {
         await callModel({
           apiKey,
           modelId: c.modelId,
+          useWebSearch,
           messages: [
             { role: 'system', content: sysPrompt },
             { role: 'user', content: userPrompt },
@@ -193,6 +196,7 @@ export default function CouncilPage() {
         await callModel({
           apiKey,
           modelId: c.modelId,
+          useWebSearch,
           messages: [
             { role: 'system', content: sysPrompt },
             { role: 'user', content: userPrompt },
@@ -236,6 +240,7 @@ export default function CouncilPage() {
       await callModel({
         apiKey,
         modelId: chairman.modelId,
+        useWebSearch,
         messages: [
           { role: 'system', content: chairmanSys },
           { role: 'user', content: 'Deliver your synthesis now.' },
