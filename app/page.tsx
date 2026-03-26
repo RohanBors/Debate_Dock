@@ -2,7 +2,9 @@
 
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
-import ParticleBackground from '@/components/ParticleBackground';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ArrowRight, Github, ArrowDown, Zap } from 'lucide-react';
+import ShaderBackground from '@/components/ui/ShaderBackground';
 
 const TAGLINES = [
   'Seven minds. One truth.',
@@ -11,103 +13,197 @@ const TAGLINES = [
   'The council has convened.',
 ];
 
+const ROUNDS = [
+  { num: '01', round: 'Round 1', label: 'Opening Statements', desc: 'Each councillor speaks independently — no cross-talk, no influence.' },
+  { num: '02', round: 'Round 2', label: 'Rebuttals', desc: 'Models read each other and respond with named, targeted critiques.' },
+  { num: '03', round: 'Round 3', label: 'Chairman Synthesis', desc: 'One final verdict distilled from all voices — clear, decisive, unified.' },
+];
+
+const container = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.12 } },
+};
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 28 },
+  show:   { opacity: 1, y: 0, transition: { duration: 0.65, ease: [0.22, 1, 0.36, 1] } },
+};
+
+const fadePop = {
+  hidden: { opacity: 0, scale: 0.93 },
+  show:   { opacity: 1, scale: 1, transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] } },
+};
+
 export default function HomePage() {
-  const [tagline, setTagline] = useState(TAGLINES[0]);
-  const [idx, setIdx] = useState(0);
+  const [taglineIdx, setTaglineIdx] = useState(0);
 
   useEffect(() => {
-    const t = setInterval(() => {
-      setIdx((i) => {
-        const next = (i + 1) % TAGLINES.length;
-        setTagline(TAGLINES[next]);
-        return next;
-      });
-    }, 3000);
+    const t = setInterval(() => setTaglineIdx(i => (i + 1) % TAGLINES.length), 3200);
     return () => clearInterval(t);
   }, []);
 
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center relative overflow-hidden px-4">
-      <ParticleBackground variant="expanded" />
-      {/* Background glow */}
-      <div className="absolute inset-0 bg-council-glow pointer-events-none" />
+    <main className="relative min-h-screen overflow-hidden bg-black">
+
+      {/* ── Layer 0: WebGL Shader ── */}
+      <ShaderBackground />
+
+      {/* ── Layer 1: Vignette overlay so content stays readable ── */}
       <div
-        className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full opacity-10 blur-3xl pointer-events-none animate-float"
-        style={{ background: 'radial-gradient(circle, #ccff00 0%, transparent 70%)' }}
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background:
+            'radial-gradient(ellipse 80% 70% at 50% 40%, transparent 0%, rgba(0,0,0,0.75) 100%)',
+        }}
       />
 
-      {/* Content */}
-      <div className="relative z-10 text-center max-w-3xl animate-fade-in">
-        {/* Badge */}
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium mb-8 border transition-all hover:border-council-accent hover:shadow-[0_0_15px_rgba(204,255,0,0.3)]"
-          style={{ background: 'rgba(204,255,0,0.05)', border: '1px solid rgba(204,255,0,0.2)', color: '#ccff00' }}>
-          <span className="w-1.5 h-1.5 rounded-full bg-council-accent animate-pulse-slow inline-block" />
-          Open Source · Powered by OpenRouter
-        </div>
+      {/* ── Layer 2: Content ── */}
+      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 pt-24 pb-32">
+        <motion.div
+          variants={container}
+          initial="hidden"
+          animate="show"
+          className="flex flex-col items-center text-center max-w-4xl mx-auto"
+        >
 
-        {/* Title */}
-        <h1 className="text-6xl md:text-7xl font-extrabold mb-4"
-          style={{ background: 'linear-gradient(135deg, #ffffff 30%, #ccff00 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', textShadow: '0 0 40px rgba(204,255,0,0.2)' }}>
-          Debate Dock
-        </h1>
-
-        {/* Rotating tagline */}
-        <p key={tagline} className="text-xl text-council-muted mb-12 h-8 animate-fade-in font-light">
-          {tagline}
-        </p>
-
-        {/* Description */}
-        <p className="text-council-text/70 max-w-xl mx-auto mb-12 leading-relaxed text-lg">
-          Assemble up to <span className="text-council-accent font-semibold tracking-wide">7 AI models</span> as a council. Assign each a{' '}
-          <span className="text-white font-semibold">persona</span>. Run structured{' '}
-          <span className="text-white font-semibold">3-round debates</span>. Let the{' '}
-          <span className="text-council-accent font-semibold tracking-wide">Chairman</span> synthesize the truth.
-        </p>
-
-        {/* CTA */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Link
-            href="/settings"
-            className="px-8 py-4 rounded-xl font-bold transition-all duration-300 hover:scale-105"
-            style={{
-              background: '#ccff00',
-              color: '#000000',
-              boxShadow: '0 0 25px rgba(204,255,0,0.3)',
-            }}
-          >
-            Open your Dock →
-          </Link>
-          <a
-            href="https://github.com/RohanBors/Debate_Dock"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="px-8 py-4 rounded-xl font-semibold transition-all duration-200 hover:scale-105"
-            style={{
-              background: 'rgba(255,255,255,0.05)',
-              border: '1px solid rgba(255,255,255,0.1)',
-              color: '#e8e8f0',
-            }}
-          >
-            ★ GitHub
-          </a>
-        </div>
-
-        {/* Round flow preview */}
-        <div className="mt-20 grid grid-cols-3 gap-4 text-left">
-          {[
-            { round: 'Round 1', label: 'Opening Statements', desc: 'Each councillor speaks independently', icon: null, num: '01' },
-            { round: 'Round 2', label: 'Rebuttals', desc: 'Models read each other and respond', icon: null, num: '02' },
-            { round: 'Round 3', label: 'Chairman Synthesis', desc: 'Final verdict distilled from all voices', icon: null, num: '03' },
-          ].map((r) => (
-            <div key={r.round} className="council-card p-5 hover:border-council-accent transition-all duration-300 hover:shadow-[0_0_20px_rgba(204,255,0,0.1)] hover:-translate-y-1">
-              <div className="text-xs font-black text-council-accent tracking-widest mb-3" style={{ fontFamily: 'var(--font-sora)' }}>{r.num}</div>
-              <div className="text-xs font-bold text-council-accent uppercase tracking-widest mb-1.5">{r.round}</div>
-              <div className="text-sm font-semibold text-white mb-2">{r.label}</div>
-              <div className="text-xs text-council-muted leading-relaxed">{r.desc}</div>
+          {/* Badge */}
+          <motion.div variants={fadeUp}>
+            <div
+              className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full text-xs font-semibold mb-10 tracking-wide"
+              style={{
+                background: 'rgba(204,255,0,0.06)',
+                border: '1px solid rgba(204,255,0,0.25)',
+                color: '#ccff00',
+              }}
+            >
+              <Zap className="w-3 h-3 fill-[#ccff00]" />
+              Open Source · Powered by OpenRouter
             </div>
-          ))}
-        </div>
+          </motion.div>
+
+          {/* Title */}
+          <motion.h1
+            variants={fadeUp}
+            className="text-7xl md:text-8xl lg:text-9xl font-extrabold tracking-tight leading-none mb-6"
+            style={{
+              background: 'linear-gradient(140deg, #ffffff 20%, #ccff00 80%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+            }}
+          >
+            Debate Dock
+          </motion.h1>
+
+          {/* Rotating tagline */}
+          <motion.div variants={fadeUp} className="h-9 mb-6 overflow-hidden">
+            <AnimatePresence mode="wait">
+              <motion.p
+                key={taglineIdx}
+                initial={{ opacity: 0, y: 14 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -14 }}
+                transition={{ duration: 0.4, ease: 'easeOut' }}
+                className="text-xl text-[#8b8b99] font-light"
+              >
+                {TAGLINES[taglineIdx]}
+              </motion.p>
+            </AnimatePresence>
+          </motion.div>
+
+          {/* Description */}
+          <motion.p
+            variants={fadeUp}
+            className="text-white/60 text-lg leading-relaxed max-w-2xl mb-12"
+          >
+            Assemble up to{' '}
+            <span className="text-[#ccff00] font-semibold">7 AI models</span> as a council.
+            Assign each a <span className="text-white font-semibold">persona</span>.
+            Run structured <span className="text-white font-semibold">3-round debates</span>.
+            Let the <span className="text-[#ccff00] font-semibold">Chairman</span> synthesize the truth.
+          </motion.p>
+
+          {/* CTAs */}
+          <motion.div variants={fadeUp} className="flex flex-col sm:flex-row gap-4 mb-24">
+            <Link href="/settings">
+              <motion.span
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.97 }}
+                className="inline-flex items-center gap-2.5 px-8 py-4 rounded-xl font-bold text-base cursor-pointer"
+                style={{
+                  background: '#ccff00',
+                  color: '#000000',
+                  boxShadow: '0 0 30px rgba(204,255,0,0.35)',
+                }}
+              >
+                Open your Dock
+                <ArrowRight className="w-4 h-4" />
+              </motion.span>
+            </Link>
+
+            <motion.a
+              href="https://github.com/RohanBors/Debate_Dock"
+              target="_blank"
+              rel="noopener noreferrer"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.97 }}
+              className="inline-flex items-center gap-2.5 px-8 py-4 rounded-xl font-semibold text-base"
+              style={{
+                background: 'rgba(255,255,255,0.05)',
+                border: '1px solid rgba(255,255,255,0.12)',
+                color: '#e8e8f0',
+              }}
+            >
+              <Github className="w-4 h-4" />
+              GitHub
+            </motion.a>
+          </motion.div>
+
+          {/* Round cards */}
+          <motion.div
+            variants={container}
+            className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full text-left"
+          >
+            {ROUNDS.map((r) => (
+              <motion.div
+                key={r.round}
+                variants={fadePop}
+                whileHover={{ y: -4, boxShadow: '0 0 30px rgba(204,255,0,0.12)' }}
+                className="p-5 rounded-xl cursor-default"
+                style={{
+                  background: 'rgba(17,17,21,0.8)',
+                  border: '1px solid rgba(34,34,42,0.9)',
+                  backdropFilter: 'blur(12px)',
+                }}
+              >
+                <div
+                  className="text-xs font-black tracking-widest mb-3"
+                  style={{ color: '#ccff00', fontFamily: 'var(--font-sora)' }}
+                >
+                  {r.num}
+                </div>
+                <div className="text-xs font-bold text-[#ccff00] uppercase tracking-widest mb-1.5">
+                  {r.round}
+                </div>
+                <div className="text-sm font-semibold text-white mb-2">{r.label}</div>
+                <div className="text-xs text-[#8b8b99] leading-relaxed">{r.desc}</div>
+              </motion.div>
+            ))}
+          </motion.div>
+        </motion.div>
       </div>
+
+      {/* Scroll indicator */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1, y: [0, 8, 0] }}
+        transition={{
+          opacity: { delay: 1.8, duration: 0.6 },
+          y: { delay: 2.2, duration: 1.8, repeat: Infinity, ease: 'easeInOut' },
+        }}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2"
+      >
+        <ArrowDown className="w-5 h-5 text-[#44444f]" />
+      </motion.div>
     </main>
   );
 }
