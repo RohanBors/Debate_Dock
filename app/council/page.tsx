@@ -12,7 +12,7 @@ function buildSystemPrompt(councillor: Councillor, previousChairmanSummary: stri
   const context = previousChairmanSummary
     ? `\n\nThis is not the first discussion. The Chairman's synthesis from the previous round of discussion was:\n"""\n${previousChairmanSummary}\n"""\nUse this as background context when forming your views.`
     : '';
-  return `${base}${context}\n\nBe thoughtful, concise (3-5 paragraphs), and stay in character.`;
+  return `${base}${context}\n\nStay fully in character. Give your genuine, substantive view — do not truncate your reasoning.`;
 }
 
 function buildChairmanPrompt(transcript: string, previousChairmanSummary: string | null): string {
@@ -20,7 +20,7 @@ function buildChairmanPrompt(transcript: string, previousChairmanSummary: string
   const context = previousChairmanSummary
     ? `Previous discussion summary:\n"""\n${previousChairmanSummary}\n"""\n\n`
     : '';
-  return `You are the Chairman of this council. Today's date is ${dateStr}. ${context}Below is the full transcript of the deliberation across two rounds:\n\n${transcript}\n\nYour task:\n1. Synthesize the strongest insights from all council members.\n2. Note key points of agreement and meaningful disagreements.\n3. Provide a clear, actionable final synthesis (6-8 paragraphs).\n4. End with a "Chairman's Verdict" — a single bold conclusion.\n\nBe authoritative, fair, and decisive.`;
+  return `You are the Chairman of this council. Today's date is ${dateStr}. ${context}Below is the full transcript of the deliberation across two rounds:\n\n${transcript}\n\nYour task:\n1. Synthesize the strongest insights from all council members.\n2. Note key points of agreement and meaningful disagreements.\n3. Provide a clear, actionable final synthesis — be as thorough as the material demands.\n4. End with a "Chairman's Verdict" — a single bold conclusion.\n\nBe authoritative, fair, and decisive.`;
 }
 
 // ─── Helper: build transcript string ───────────────────────────────────────
