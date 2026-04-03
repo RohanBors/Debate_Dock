@@ -6,6 +6,7 @@ export type Councillor = {
   modelId: string;      // OpenRouter model id e.g. "anthropic/claude-sonnet-4-5"
   modelName: string;    // Human display name
   persona: string;      // Role name e.g. "The Analyst"
+  customSystemPrompt?: string; // Optional user-defined system prompt override
   isChairman: boolean;
   color: string;        // Unique badge color per councillor
 };
@@ -35,6 +36,7 @@ export type CouncilState = {
   // Council setup
   councillors: Councillor[];
   setCouncillors: (c: Councillor[]) => void;
+  updateCouncillor: (id: string, updates: Partial<Councillor>) => void;
 
   // Session
   turns: Turn[];
@@ -65,6 +67,9 @@ export const useCouncilStore = create<CouncilState>()(
 
       councillors: [],
       setCouncillors: (c) => set({ councillors: c }),
+      updateCouncillor: (id, updates) => set((s) => ({
+        councillors: s.councillors.map(c => c.id === id ? { ...c, ...updates } : c)
+      })),
 
       turns: [],
       activeTurnIndex: -1,

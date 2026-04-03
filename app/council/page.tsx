@@ -4,23 +4,33 @@ import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useCouncilStore, Councillor } from '@/store/councilStore';
 import { callModel } from '@/lib/openrouter';
+import { Edit2 } from 'lucide-react';
+import PersonaEditModal from '@/components/ui/PersonaEditModal';
 
 // ─── Persona system prompts ────────────────────────────────────────────────
 function buildSystemPrompt(councillor: Councillor, previousChairmanSummary: string | null): string {
   const dateStr = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-  const base = `You are "${councillor.persona}", a council member in a structured AI deliberation.\nToday's date is ${dateStr}. Always consider recent events, macroeconomic conditions, and news up to this exact date.`;
+  const baseDefault = `You are "${councillor.persona}", a council member in a structured AI deliberation.\nToday's date is ${dateStr}. Always consider recent events, macroeconomic conditions, and news up to this exact date.`;
+  const base = councillor.customSystemPrompt 
+    ? `You are "${councillor.persona}".\n${councillor.customSystemPrompt}\nToday's date is ${dateStr}. Always consider recent events, macroeconomic conditions, and news up to this exact date.`
+    : baseDefault;
   const context = previousChairmanSummary
     ? `\n\nThis is not the first discussion. The Chairman's synthesis from the previous round of discussion was:\n"""\n${previousChairmanSummary}\n"""\nUse this as background context when forming your views.`
     : '';
   return `${base}${context}\n\nStay fully in character. Give your genuine, substantive view — do not truncate your reasoning.`;
 }
 
-function buildChairmanPrompt(transcript: string, previousChairmanSummary: string | null): string {
+function buildChairmanPrompt(councillor: Councillor, transcript: string, previousChairmanSummary: string | null): string {
   const dateStr = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
   const context = previousChairmanSummary
     ? `Previous discussion summary:\n"""\n${previousChairmanSummary}\n"""\n\n`
     : '';
-  return `You are the Chairman of this council. Today's date is ${dateStr}. ${context}Below is the full transcript of the deliberation across two rounds:\n\n${transcript}\n\nYour task:\n1. Synthesize the strongest insights from all council members.\n2. Note key points of agreement and meaningful disagreements.\n3. Provide a clear, actionable final synthesis — be as thorough as the material demands.\n4. End with a "Chairman's Verdict" — a single bold conclusion.\n\nBe authoritative, fair, and decisive.`;
+  const task = `Below is the full transcript of the deliberation across two rounds:\n\n${transcript}\n\nYour task:\n1. Synthesize the strongest insights from all council members.\n2. Note key points of agreement and meaningful disagreements.\n3. Provide a clear, actionable final synthesis — be as thorough as the material demands.\n4. End with a "Chairman's Verdict" — a single bold conclusion.\n\nBe authoritative, fair, and decisive.`;
+
+  if (councillor.customSystemPrompt) {
+    return `You are "${councillor.persona}".\n${councillor.customSystemPrompt}\nToday's date is ${dateStr}. ${context}${task}`;
+  }
+  return `You are the Chairman of this council. Today's date is ${dateStr}. ${context}${task}`;
 }
 
 // ─── Helper: build transcript string ───────────────────────────────────────
@@ -124,6 +134,7 @@ export default function CouncilPage() {
   const [isRunning, setIsRunning] = useState(false);
   const [currentStep, setCurrentStep] = useState('');
   const [error, setError] = useState('');
+  const [editingCouncillorId, setEditingCouncillorId] = useState<string | null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
 
   // Redirect if not set up
@@ -232,7 +243,7 @@ export default function CouncilPage() {
       turn.messages as Message[],
       councillors
     );
-    const chairmanSys = buildChairmanPrompt(transcript, getPreviousChairmanSummary());
+    const chairmanSys = buildChairmanPrompt(chairman, transcript, getPreviousChairmanSummary());
 
     appendMessage(turnIdx, { councillorId: chairman.id, round: 3, content: '', streaming: true });
     let accum = '';
@@ -325,13 +336,20 @@ export default function CouncilPage() {
         <div className="p-3">
           <p className="text-xs text-council-muted uppercase tracking-wider mb-3 px-1">Council</p>
           {councillors.map((c) => (
-            <div key={c.id} className="flex items-center gap-2 px-2 py-2 rounded-lg mb-1">
+            <div key={c.id} className="group flex items-center gap-2 px-2 py-2 rounded-lg mb-1 hover:bg-white/5 transition-colors">
               <div className="w-2 h-2 rounded-full shrink-0" style={{ background: c.color }} />
               <div className="min-w-0">
                 <div className="text-xs font-medium text-white truncate">{c.persona}</div>
                 <div className="text-xs text-council-muted truncate">{c.modelName}</div>
               </div>
-              {c.isChairman && <span className="text-xs ml-auto">👑</span>}
+              {c.isChairman && <span className="text-xs ml-auto group-hover:hidden">👑</span>}
+              <button 
+                onClick={() => setEditingCouncillorId(c.id)} 
+                className={`ml-auto opacity-0 group-hover:opacity-100 p-1.5 hover:bg-black/40 rounded-lg transition-all text-gray-400 hover:text-white ${!c.isChairman && 'col-span-1'}`}
+                title="Edit Persona"
+              >
+                <Edit2 className="w-3 h-3" />
+              </button>
             </div>
           ))}
         </div>
@@ -555,6 +573,12 @@ export default function CouncilPage() {
           </div>
         </div>
       </div>
+
+      <PersonaEditModal 
+        isOpen={!!editingCouncillorId} 
+        onClose={() => setEditingCouncillorId(null)} 
+        councillor={councillors.find(c => c.id === editingCouncillorId) || null} 
+      />
     </div>
   );
 }
