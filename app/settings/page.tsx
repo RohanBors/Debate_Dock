@@ -77,7 +77,8 @@ export default function SettingsPage() {
   }, [keyInput, setApiKey]);
 
   const handleLaunch = () => {
-    setCouncillors(slots.map((s, i) => ({ id: `slot-${i}`, ...s })));
+    const activeSlots = [...slots.slice(0, 6).filter(s => s.modelId), slots[6]];
+    setCouncillors(activeSlots.map((s, i) => ({ id: `slot-${i}`, ...s })));
     router.push('/council');
   };
 
@@ -85,7 +86,9 @@ export default function SettingsPage() {
     setSlots(prev => prev.map((s, i) => i === idx ? { ...s, persona } : s));
   };
 
-  const canProceed = slots.every(s => s.modelId) && apiKey;
+  const assignedDebaters = slots.slice(0, 6).filter(s => s.modelId);
+  const hasChairman = !!slots[6].modelId;
+  const canProceed = apiKey && assignedDebaters.length >= 2 && hasChairman;
 
   return (
     <div className="min-h-screen bg-[#000] text-[#E5E5E5] font-sans">
@@ -175,7 +178,7 @@ export default function SettingsPage() {
         {/* ── Council Grid ── */}
         <div className="mb-4 flex items-center justify-between">
           <h2 className="text-2xl font-bold text-white">Assemble Council</h2>
-          <span className="text-sm font-medium text-gray-500">7 Seats Required</span>
+          <span className="text-sm font-medium text-gray-500">2 to 6 Debaters + Chairman Required</span>
         </div>
 
         {/* Top 6 Debaters */}

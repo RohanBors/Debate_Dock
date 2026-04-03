@@ -391,23 +391,32 @@ export default function CouncilPage() {
       <div className="flex-1 flex flex-col overflow-hidden">
 
         {/* Header */}
-        <header className="px-6 py-4 border-b flex items-center gap-4" style={{ borderColor: '#2a2a3a' }}>
-          <div>
-            <h2 className="font-semibold text-white text-sm">
-              {activeTurn ? activeTurn.userPrompt.slice(0, 60) + (activeTurn.userPrompt.length > 60 ? '…' : '') : 'Council Room'}
-            </h2>
-            {activeTurn && (
-              <p className="text-xs text-council-muted">
-                Turn {activeTurnIndex + 1} · {activeTurn.completedRounds === 0 ? 'Awaiting Round 1' : activeTurn.completedRounds === 3 ? 'Complete' : `Round ${activeTurn.completedRounds} done`}
-              </p>
+        <header className="px-6 py-4 border-b flex items-center justify-between" style={{ borderColor: '#2a2a3a' }}>
+          <div className="flex items-center gap-4">
+            <div>
+              <h2 className="font-semibold text-white text-sm">
+                {activeTurn ? activeTurn.userPrompt.slice(0, 60) + (activeTurn.userPrompt.length > 60 ? '…' : '') : 'Council Room'}
+              </h2>
+              {activeTurn && (
+                <p className="text-xs text-council-muted">
+                  Turn {activeTurnIndex + 1} · {activeTurn.completedRounds === 0 ? 'Awaiting Round 1' : activeTurn.completedRounds === 3 ? 'Complete' : `Round ${activeTurn.completedRounds} done`}
+                </p>
+              )}
+            </div>
+            {isRunning && (
+              <div className="flex items-center gap-2">
+                <div className="w-1.5 h-1.5 rounded-full bg-council-accent animate-pulse" />
+                <span className="text-xs text-council-muted">{currentStep}</span>
+              </div>
             )}
           </div>
-          {isRunning && (
-            <div className="ml-auto flex items-center gap-2">
-              <div className="w-1.5 h-1.5 rounded-full bg-council-accent animate-pulse" />
-              <span className="text-xs text-council-muted">{currentStep}</span>
-            </div>
-          )}
+          
+          <button 
+            onClick={() => router.push('/settings')} 
+            className="text-xs font-bold text-gray-400 hover:text-white px-3 py-1.5 rounded-lg border border-white/10 hover:bg-white/5 transition-colors hidden sm:block"
+          >
+            Back to Model Selection
+          </button>
         </header>
 
         {/* Transcript */}
