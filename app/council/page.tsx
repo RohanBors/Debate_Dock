@@ -127,7 +127,7 @@ export default function CouncilPage() {
     apiKey, useWebSearch, councillors, turns, activeTurnIndex,
     addTurn, appendMessage, updateMessageContent,
     setChairmanSummary, setCompletedRounds,
-    getPreviousChairmanSummary, resetSession,
+    getPreviousChairmanSummary, restartTurn, resetSession,
   } = useCouncilStore();
 
   const [prompt, setPrompt] = useState('');
@@ -136,6 +136,7 @@ export default function CouncilPage() {
   const [error, setError] = useState('');
   const [editingCouncillorId, setEditingCouncillorId] = useState<string | null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
+  const abortControllerRef = useRef<AbortController | null>(null);
 
   // Redirect if not set up
   useEffect(() => {
@@ -171,6 +172,7 @@ export default function CouncilPage() {
             { role: 'system', content: sysPrompt },
             { role: 'user', content: userPrompt },
           ],
+          signal: abortControllerRef.current?.signal,
           onChunk: (chunk) => {
             accum += chunk;
             updateMessageContent(turnIdx, 1, c.id, accum);
@@ -178,6 +180,10 @@ export default function CouncilPage() {
         });
         updateMessageContent(turnIdx, 1, c.id, accum, true);
       } catch (e: unknown) {
+        if (e instanceof Error && e.name === 'AbortError') {
+          updateMessageContent(turnIdx, 1, c.id, `[Generation stopped by user]`, true);
+          break;
+        }
         const msg = e instanceof Error ? e.message : 'Unknown error';
         updateMessageContent(turnIdx, 1, c.id, `⚠️ Error: ${msg}`, true);
       }
@@ -220,6 +226,7 @@ export default function CouncilPage() {
               content: `Here are the opening statements from your fellow council members:\n\n${r1Transcript}\n\nNow provide your rebuttal. Reference specific council members by name. Be direct, substantive, and stay in character.`,
             },
           ],
+          signal: abortControllerRef.current?.signal,
           onChunk: (chunk) => {
             accum += chunk;
             updateMessageContent(turnIdx, 2, c.id, accum);
@@ -227,6 +234,10 @@ export default function CouncilPage() {
         });
         updateMessageContent(turnIdx, 2, c.id, accum, true);
       } catch (e: unknown) {
+        if (e instanceof Error && e.name === 'AbortError') {
+          updateMessageContent(turnIdx, 2, c.id, `[Generation stopped by user]`, true);
+          break;
+        }
         const msg = e instanceof Error ? e.message : 'Unknown error';
         updateMessageContent(turnIdx, 2, c.id, `⚠️ Error: ${msg}`, true);
       }
@@ -256,6 +267,7 @@ export default function CouncilPage() {
           { role: 'system', content: chairmanSys },
           { role: 'user', content: 'Deliver your synthesis now.' },
         ],
+        signal: abortControllerRef.current?.signal,
         onChunk: (chunk) => {
           accum += chunk;
           updateMessageContent(turnIdx, 3, chairman.id, accum);
@@ -264,8 +276,12 @@ export default function CouncilPage() {
       updateMessageContent(turnIdx, 3, chairman.id, accum, true);
       setChairmanSummary(turnIdx, accum);
     } catch (e: unknown) {
-      const msg = e instanceof Error ? e.message : 'Unknown error';
-      updateMessageContent(turnIdx, 3, chairman.id, `⚠️ Error: ${msg}`, true);
+      if (e instanceof Error && e.name === 'AbortError') {
+        updateMessageContent(turnIdx, 3, chairman.id, `[Generation stopped by user]`, true);
+      } else {
+        const msg = e instanceof Error ? e.message : 'Unknown error';
+        updateMessageContent(turnIdx, 3, chairman.id, `⚠️ Error: ${msg}`, true);
+      }
     }
     setCompletedRounds(turnIdx, 3);
   }
@@ -275,6 +291,7 @@ export default function CouncilPage() {
     if (!prompt.trim() || isRunning) return;
     setError('');
     setIsRunning(true);
+    abortControllerRef.current = new AbortController();
     const userPrompt = prompt.trim();
     setPrompt('');
 
@@ -296,6 +313,7 @@ export default function CouncilPage() {
   async function handleNextRound() {
     if (!activeTurn || isRunning) return;
     setIsRunning(true);
+    abortControllerRef.current = new AbortController();
     setError('');
     const turnIdx = activeTurnIndex;
 
@@ -411,12 +429,41 @@ export default function CouncilPage() {
             )}
           </div>
           
-          <button 
-            onClick={() => router.push('/settings')} 
-            className="text-xs font-bold text-gray-400 hover:text-white px-3 py-1.5 rounded-lg border border-white/10 hover:bg-white/5 transition-colors hidden sm:block"
-          >
-            Back to Model Selection
-          </button>
+          <div className="flex items-center gap-2">
+            {isRunning && (
+              <button 
+                onClick={() => {
+                  if (abortControllerRef.current) {
+                    abortControllerRef.current.abort();
+                  }
+                  setIsRunning(false);
+                  setCurrentStep('Generation stopped.');
+                }}
+                className="text-xs font-bold text-red-400 hover:text-white px-3 py-1.5 rounded-lg border border-red-400/20 hover:bg-red-400/10 transition-colors hidden sm:block"
+              >
+                Stop Generation
+              </button>
+            )}
+
+            {!isRunning && activeTurn && (
+              <button 
+                onClick={() => {
+                  restartTurn(activeTurnIndex);
+                }}
+                className="text-xs font-bold text-[#f59e0b] hover:text-white px-3 py-1.5 rounded-lg border border-[#f59e0b]/20 hover:bg-[#f59e0b]/10 transition-colors hidden sm:block"
+                title="Wipe current turn messages and start fresh"
+              >
+                Restart Turn
+              </button>
+            )}
+
+            <button 
+              onClick={() => router.push('/settings')} 
+              className="text-xs font-bold text-gray-400 hover:text-white px-3 py-1.5 rounded-lg border border-white/10 hover:bg-white/5 transition-colors hidden sm:block"
+            >
+              Back to Model Selection
+            </button>
+          </div>
         </header>
 
         {/* Transcript */}
