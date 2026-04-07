@@ -41,12 +41,14 @@ export async function callModel({
   messages,
   useWebSearch,
   onChunk,
+  signal,
 }: {
   apiKey: string;
   modelId: string;
   messages: { role: 'system' | 'user' | 'assistant'; content: string }[];
   useWebSearch?: boolean;
   onChunk?: (chunk: string) => void;
+  signal?: AbortSignal;
 }): Promise<string> {
   const body: any = {
     model: modelId,
@@ -67,6 +69,7 @@ export async function callModel({
       'X-Title': 'LLM Council',
     },
     body: JSON.stringify(body),
+    signal,
   });
 
   if (!res.ok) {

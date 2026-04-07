@@ -49,6 +49,7 @@ export type CouncilState = {
 
   // Helpers
   getPreviousChairmanSummary: () => string | null;
+  restartTurn: (turnIdx: number) => void;
   resetSession: () => void;
 };
 
@@ -132,6 +133,14 @@ export const useCouncilStore = create<CouncilState>()(
         const { turns, activeTurnIndex } = get();
         if (activeTurnIndex <= 0) return null;
         return turns[activeTurnIndex - 1]?.chairmanSummary || null;
+      },
+
+      restartTurn: (turnIdx) => {
+        set((s) => {
+          const turns = [...s.turns];
+          turns[turnIdx] = { ...turns[turnIdx], messages: [], completedRounds: 0, chairmanSummary: '' };
+          return { turns };
+        });
       },
 
       resetSession: () => set({ turns: [], activeTurnIndex: -1 }),
