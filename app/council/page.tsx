@@ -126,7 +126,7 @@ export default function CouncilPage() {
   const {
     apiKey, useWebSearch, councillors, turns, activeTurnIndex,
     addTurn, appendMessage, updateMessageContent,
-    setChairmanSummary, setCompletedRounds,
+    setChairmanSummary, setCompletedRounds, setActiveTurnIndex,
     getPreviousChairmanSummary, restartTurn, resetSession,
   } = useCouncilStore();
 
@@ -377,13 +377,23 @@ export default function CouncilPage() {
           <div className="p-3 border-t mt-auto" style={{ borderColor: '#2a2a3a' }}>
             <p className="text-xs text-council-muted uppercase tracking-wider mb-2 px-1">History</p>
             {turns.map((t, i) => (
-              <div
+              <button
                 key={i}
-                className="px-2 py-1.5 rounded text-xs text-council-muted mb-1 truncate"
-                style={{ background: i === activeTurnIndex ? 'rgba(204,255,0,0.1)' : 'transparent', color: i === activeTurnIndex ? '#ccff00' : '' }}
+                onClick={() => !isRunning && setActiveTurnIndex(i)}
+                disabled={isRunning}
+                className="w-full text-left px-2 py-1.5 rounded-md text-xs mb-1 truncate transition-colors"
+                style={{
+                  background: i === activeTurnIndex ? 'rgba(204,255,0,0.1)' : 'transparent',
+                  color: i === activeTurnIndex ? '#ccff00' : '#888',
+                  cursor: isRunning ? 'not-allowed' : 'pointer',
+                }}
+                onMouseEnter={e => { if (i !== activeTurnIndex && !isRunning) e.currentTarget.style.background = 'rgba(255,255,255,0.04)'; }}
+                onMouseLeave={e => { if (i !== activeTurnIndex) e.currentTarget.style.background = 'transparent'; }}
+                title={t.userPrompt}
               >
-                {t.userPrompt.slice(0, 40)}{t.userPrompt.length > 40 ? '…' : ''}
-              </div>
+                <span className="mr-1 opacity-50">#{i + 1}</span>
+                {t.userPrompt.slice(0, 34)}{t.userPrompt.length > 34 ? '…' : ''}
+              </button>
             ))}
           </div>
         )}

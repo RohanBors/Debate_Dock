@@ -46,6 +46,7 @@ export type CouncilState = {
   updateMessageContent: (turnIdx: number, round: 1 | 2 | 3, councillorId: string, content: string, done?: boolean) => void;
   setChairmanSummary: (turnIdx: number, summary: string) => void;
   setCompletedRounds: (turnIdx: number, rounds: number) => void;
+  setActiveTurnIndex: (idx: number) => void;
 
   // Helpers
   getPreviousChairmanSummary: () => string | null;
@@ -128,6 +129,8 @@ export const useCouncilStore = create<CouncilState>()(
           return { turns };
         });
       },
+
+      setActiveTurnIndex: (idx) => set({ activeTurnIndex: idx }),
 
       getPreviousChairmanSummary: () => {
         const { turns, activeTurnIndex } = get();
